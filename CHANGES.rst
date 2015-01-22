@@ -517,6 +517,9 @@ New Features
   - Added ``is_proj_plane_distorted`` for testing if pixels are
     distorted. [#3329]
 
+API Changes
+^^^^^^^^^^^
+
 - Misc
 
   - ``astropy._erfa`` was added as a new subpackage wrapping the functionality
