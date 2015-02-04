@@ -757,6 +757,13 @@ Bug Fixes
   - Fixed a crash that occurred when reading an ASCII table containing
     zero-precision floating point fields. [#3422]
 
+
+  - CONTINUE cards no longer end the value of the final card in the series with
+    an ampersand, per the specification of the CONTINUE card convention. [#3282]
+
+  - Fixed a crash that occurred when reading an ASCII table containing
+    zero-precision floating point fields. [#3422]
+
   - When a float field for an ASCII table has zero-precision a decimal point
     (with no digits following it) is still written to the field as long as
     there is space for it, as recommended by the FITS standard.  This makes it
