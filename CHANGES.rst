@@ -292,8 +292,8 @@ New Features
   - The ``__repr__`` of coordinate objects now shows scalar coordinates in the
     same format as vector coordinates. [#3350, 3448]
 
-  - The ``repr`` of coordinate objects now shows scalar coordinates in the
-    same format as vector coordinates. [#3350]
+  - The ``__repr__`` of coordinate objects now shows scalar coordinates in the
+    same format as vector coordinates. [#3350, 3448]
 
 - ``astropy.cosmology``
 
