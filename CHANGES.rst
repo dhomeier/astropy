@@ -292,6 +292,9 @@ New Features
   - The ``__repr__`` of coordinate objects now shows scalar coordinates in the
     same format as vector coordinates. [#3350, 3448]
 
+  - The ``repr`` of coordinate objects now shows scalar coordinates in the
+    same format as vector coordinates. [#3350]
+
 - ``astropy.cosmology``
 
   - Added ``lookback_distance``, which is ``c * lookback_time``. [#3145]
