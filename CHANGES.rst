@@ -20,6 +20,8 @@ New Features
 
 - ``astropy.cosmology``
 
+  - Add Planck 2015 cosmology [#3476]
+
 - ``astropy.io.ascii``
 
 - ``astropy.io.fits``
