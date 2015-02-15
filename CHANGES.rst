@@ -43,6 +43,10 @@ New Features
 - ``astropy.vo``
 
 - ``astropy.wcs``
+- ``astropy.io.ascii``
+
+  - Automatically use ``guess=False`` when reading if the file ``format`` is
+    provided and the format parameters are uniquely specified. [#3418]
 
 API Changes
 ^^^^^^^^^^^
