@@ -287,6 +287,25 @@ it away with ``sudo rm -rf ~/.astropy``.
 
 See for example: https://github.com/astropy/astropy/issues/987
 
+Error *'buffer' does not have the buffer interface* in ``io.fits``
+--------------------------------------------------------------------
+
+For Python 2.7.x versions prior to 2.7.4, the `astropy.io.fits` may under
+certain circumstances output the following error::
+
+    TypeError: 'buffer' does not have the buffer interface
+
+This can be resolved by upgrading to Python 2.7.4 or later (at the time of
+writing, the latest Python 2.7.x version is 2.7.9).
+
+Bug with unicode endianness in ``io.fits`` for big-endian processors
+--------------------------------------------------------------------
+
+On big-endian processors (e.g. SPARC, PowerPC, MIPS), string columnn in FITS
+files may not be correctly read when using the ``Table.read`` interface. This
+will be fixed in a subsequent bug fix release of Astropy (see `bug report here
+<https://github.com/astropy/astropy/issues/3415>`_)
+
 .. [#] Continuum `says
        <https://groups.google.com/a/continuum.io/forum/#!topic/anaconda/mCQL6fVx55A>`_
        this will be fixed in their next Python build.
