@@ -244,6 +244,7 @@ Bug Fixes
 
 
 1.0 (2015-02-18)
+1.0 (unreleased)
 ----------------
 
 General
@@ -527,6 +528,13 @@ New Features
 
   - Added ``is_proj_plane_distorted`` for testing if pixels are
     distorted. [#3329]
+
+- Misc
+
+  - ``astropy._erfa`` was added as a new subpackage wrapping the functionality
+    of the ERFA library in python.  This is primarily of use for other astropy
+    subpackages, but the API may be made more public in the future. [#2992]
+
 
 API Changes
 ^^^^^^^^^^^
