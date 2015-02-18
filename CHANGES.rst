@@ -517,6 +517,10 @@ New Features
   - Add reader / writer for the Enhanced CSV format which stores table and
     column meta data, in particular data type and unit. [#2319]
 
+  - Automatically use ``guess=False`` when reading if the file ``format`` is
+    provided and the format parameters are uniquely specified.  This update
+    also removes duplicate format guesses to improve performance. [#3418]
+
 - ``astropy.io.fits``
 
   - The ``fitsdiff`` script ignores some things by default when comparing fits
