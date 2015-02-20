@@ -241,6 +241,9 @@ Bug Fixes
     with the fast reader. [#3525]
 
   - Fixed use of mmap in the fast reader on Windows. [#3525]
+- ``astropy.units``
+
+  - Added furlong to imperial units.
 
 
 1.0 (2015-02-18)
