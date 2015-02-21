@@ -405,6 +405,8 @@ Bug fixes
 
 - ``astropy.time``
 
+  - Time objects now always evalutate to ``True``, except when empty. [#3530]
+
 - ``astropy.units``
 
 - ``astropy.utils``
