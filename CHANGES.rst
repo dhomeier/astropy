@@ -207,6 +207,9 @@ Bug fixes
 
 - ``astropy.nddata``
 
+  - Restore several properties to the compatibility class ``NDDataArray`` that
+    were inadvertently omitted [#3466].
+
 - ``astropy.stats``
 
 - ``astropy.table``
