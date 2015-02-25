@@ -256,7 +256,7 @@ Bug Fixes
   - Fixed use of mmap in the fast reader on Windows. [#3525]
 - ``astropy.units``
 
-  - Added furlong to imperial units.
+  - Added furlong to imperial units. [#3529]
 
 - ``astropy.utils``
 
@@ -389,6 +389,12 @@ Bug fixes
 - ``astropy.cosmology``
 
 - ``astropy.io.ascii``
+
+  - Fixed support for reading inf and nan values with the fast reader in
+    Windows.  Also fixed in the case of using ``use_fast_converter=True``
+    with the fast reader. [#3525]
+
+  - Fixed use of mmap in the fast reader on Windows. [#3525]
 
 - ``astropy.io.fits``
 
