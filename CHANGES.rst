@@ -416,6 +416,9 @@ New Features
 
 - ``astropy.io.ascii``
 
+  - Fix a segfault in the fast C parser when one of the column headers
+    is empty [#3545].
+
 - ``astropy.io.fits``
 
   - Fixed bug where column data could be unintentionally byte-swapped when
