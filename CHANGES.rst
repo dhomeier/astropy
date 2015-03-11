@@ -371,17 +371,13 @@ Other Changes and Additions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-1.0.1 (unreleased)
+1.0.2 (unreleased)
 ------------------
 
-Bug fixes
-^^^^^^^^^
-
-- ``astropy.analytic_functions``
+New Features
+^^^^^^^^^^^^
 
 - ``astropy.config``
-
-- ``astropy.conftest.py``
 
 - ``astropy.constants``
 
@@ -393,6 +389,137 @@ Bug fixes
 
 - ``astropy.io.ascii``
 
+- ``astropy.io.fits``
+
+- ``astropy.io.misc``
+
+- ``astropy.io.registry``
+
+- ``astropy.io.votable``
+
+- ``astropy.modeling``
+
+- ``astropy.nddata``
+
+- ``astropy.stats``
+
+- ``astropy.sphinx``
+
+- ``astropy.table``
+
+- ``astropy.time``
+
+- ``astropy.units``
+
+- ``astropy.utils``
+
+- ``astropy.vo``
+
+- ``astropy.wcs``
+
+API Changes
+^^^^^^^^^^^
+
+- ``astropy.config``
+
+- ``astropy.constants``
+
+- ``astropy.convolution``
+
+- ``astropy.coordinates``
+
+- ``astropy.cosmology``
+
+- ``astropy.io.ascii``
+
+- ``astropy.io.fits``
+
+- ``astropy.io.misc``
+
+- ``astropy.io.registry``
+
+- ``astropy.io.votable``
+
+- ``astropy.modeling``
+
+- ``astropy.nddata``
+
+- ``astropy.stats``
+
+- ``astropy.table``
+
+- ``astropy.time``
+
+- ``astropy.units``
+
+- ``astropy.utils``
+
+- ``astropy.vo``
+
+- ``astropy.wcs``
+
+Bug Fixes
+^^^^^^^^^
+
+- ``astropy.config``
+
+- ``astropy.constants``
+
+- ``astropy.convolution``
+
+- ``astropy.coordinates``
+
+- ``astropy.cosmology``
+
+- ``astropy.io.ascii``
+
+- ``astropy.io.fits``
+
+- ``astropy.io.misc``
+
+- ``astropy.io.registry``
+
+- ``astropy.io.votable``
+
+- ``astropy.modeling``
+
+- ``astropy.nddata``
+
+- ``astropy.stats``
+
+- ``astropy.table``
+
+- ``astropy.time``
+
+- ``astropy.units``
+
+- ``astropy.utils``
+
+- ``astropy.vo``
+
+- ``astropy.wcs``
+
+Other Changes and Additions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Nothing changed yet.
+
+
+1.0.1 (2015-03-06)
+------------------
+
+Bug Fixes
+^^^^^^^^^
+
+- ``astropy.constants``
+
+  - Ensure constants can be turned into ``Quantity`` safely. [#3537, #3538]
+
+- ``astropy.io.ascii``
+
+  - Fix a segfault in the fast C parser when one of the column headers
+    is empty [#3545].
+
   - Fixed support for reading inf and nan values with the fast reader in
     Windows.  Also fixed in the case of using ``use_fast_converter=True``
     with the fast reader. [#3525]
@@ -403,37 +530,21 @@ Bug fixes
     (i.e. column headers) as purely information comments, leading to problems
     when trying to round-trip the table. [#3562]
 
-- ``astropy.io.fits``
-
-- ``astropy.io.misc``
-
-- ``astropy.io.votable``
-
-- ``astropy.logger.py``
-
 - ``astropy.modeling``
+
+  - Fixed propagation of parameter constraints ('fixed', 'bounds', 'tied')
+    between compound models and their components.  There is may still be some
+    difficulty defining 'tied' constraints properly for use with compound
+    models, however. [#3481]
 
 - ``astropy.nddata``
 
-- ``astropy.stats``
-
-- ``astropy.table``
-
-- ``astropy.tests``
+  - Restore several properties to the compatibility class ``NDDataArray`` that
+    were inadvertently omitted [#3466].
 
 - ``astropy.time``
 
   - Time objects now always evalutate to ``True``, except when empty. [#3530]
-
-- ``astropy.units``
-
-- ``astropy.utils``
-
-- ``astropy.visualization``
-
-- ``astropy.vo``
-
-- ``astropy.wcs``
 
 Miscellaneous
 ^^^^^^^^^^^^^
@@ -445,6 +556,13 @@ Miscellaneous
 - Miscellaneous
 
   - Improve import time of astropy [#3488].
+
+Other Changes and Additions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Updated bundled astropy-helpers version to v1.0.1 to address installation
+  issues with some packages that depend on Astropy. [#3541]
+
 
 1.0 (2015-02-18)
 1.0 (unreleased)
