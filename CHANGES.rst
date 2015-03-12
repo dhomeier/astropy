@@ -411,6 +411,9 @@ New Features
 
 - ``astropy.units``
 
+  - Ensure equivalencies that do more than just scale a ``Quantity`` are
+    properly handled also in ``ufunc`` evaluations. [#2496, #3586]
+  
 - ``astropy.utils``
 
 - ``astropy.vo``
