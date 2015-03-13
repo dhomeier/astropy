@@ -217,6 +217,10 @@ Bug fixes
 
 - ``astropy.table``
 
+  - ``add_column()`` and ``add_columns()`` now have ``rename_duplicate``
+    option to rename new column(s) rather than raise exception when its name
+    already exists. [#3592]
+
 - ``astropy.tests``
 
 - ``astropy.time``
