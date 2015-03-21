@@ -265,6 +265,8 @@ Bug Fixes
     with the fast reader. [#3525]
 
   - Fixed use of mmap in the fast reader on Windows. [#3525]
+  - Add support for FITS standard time strings. [#3547]
+  
 - ``astropy.units``
 
   - Added furlong to imperial units. [#3529]
