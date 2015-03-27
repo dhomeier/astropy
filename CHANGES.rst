@@ -515,6 +515,9 @@ Bug Fixes
 
 - ``astropy.io.votable``
 
+  - Loading a ``TABLE`` element without any ``DATA`` now correctly
+    creates a 0-row array. [#3636]
+
 - ``astropy.modeling``
 
 - ``astropy.nddata``
