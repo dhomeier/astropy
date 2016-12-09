@@ -114,7 +114,12 @@ def test_read_with_names_arg(fast_reader):
     """
     Test that a bad value of `names` raises an exception.
     """
-    with pytest.raises(ValueError):
+    # CParser only uses columns in `names` and thus reports mismach in num_col
+    if fast_reader:
+        e = ascii.InconsistentTableError
+    else:
+        e = ValueError
+    with pytest.raises(e):
         dat = ascii.read(['c d', 'e f'], names=('a', ), guess=False, fast_reader=fast_reader)
 
 
