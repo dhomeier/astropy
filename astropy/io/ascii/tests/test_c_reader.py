@@ -1172,7 +1172,7 @@ def test_fortran_invalid_exp(parallel, guess):
 
         assert_table_equal(t3, Table([[col] for col in vals_e], names=header))
 
-    # iterate for expchar 'D'
+    # iterate for regular converter (strtod)
     for s in formats.values():
         t4 = ascii.read(StringIO(s.join(header)+'\n'+s.join(fields)), guess=guess,
                 fast_reader={'parallel': parallel, 'exponent_style': 'D'})
