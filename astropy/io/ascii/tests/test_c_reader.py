@@ -8,6 +8,7 @@ except ImportError:  # cStringIO doesn't exist in Python 3
 
 import os
 import functools
+import copy
 
 from textwrap import dedent
 
