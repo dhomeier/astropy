@@ -24,12 +24,6 @@ astropy.extern
 
 astropy.io.ascii
 ^^^^^^^^^^^^^^^^
-  - Options not available with the fast reader raise a ``ParameterError``
-    if the latter was explicitly requested; ``guess=True`` will try
-    all formats with a fast reader instead of falling back to the slow
-    reader after the first one (``FastBasic``). [#5578]
-
-- ``astropy.io.fits``
 
 astropy.io.fits
 ^^^^^^^^^^^^^^^
@@ -305,6 +299,11 @@ astropy.extern
 
 astropy.io.ascii
 ^^^^^^^^^^^^^^^^
+
+  - Options not available with the fast reader raise a ``ParameterError``
+    if the latter was explicitly requested; ``guess=True`` will try
+    all formats with a fast reader instead of falling back to the slow
+    reader after the first one (``FastBasic``). [#5578]
 
 astropy.io.fits
 ^^^^^^^^^^^^^^^
