@@ -1,10 +1,8 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import numpy as np
 
 from .. import units as u
-from ..extern.six.moves import range
 
 from .wcs import WCS, WCSSUB_CELESTIAL
 
@@ -47,7 +45,7 @@ def add_stokes_axis_to_wcs(wcs, add_before_ind):
 def _wcs_to_celestial_frame_builtin(wcs):
 
     # Import astropy.coordinates here to avoid circular imports
-    from ..coordinates import FK4, FK4NoETerms, FK5, ICRS, Galactic
+    from ..coordinates import FK4, FK4NoETerms, FK5, ICRS, ITRS, Galactic
 
     # Import astropy.time here otherwise setup.py fails before extensions are compiled
     from ..time import Time
@@ -94,6 +92,8 @@ def _wcs_to_celestial_frame_builtin(wcs):
     else:
         if xcoord == 'GLON' and ycoord == 'GLAT':
             frame = Galactic()
+        elif xcoord == 'TLON' and ycoord == 'TLAT':
+            frame = ITRS(obstime=wcs.wcs.dateobs or None)
         else:
             frame = None
 
@@ -103,7 +103,7 @@ def _wcs_to_celestial_frame_builtin(wcs):
 def _celestial_frame_to_wcs_builtin(frame, projection='TAN'):
 
     # Import astropy.coordinates here to avoid circular imports
-    from ..coordinates import BaseRADecFrame, FK4, FK4NoETerms, FK5, ICRS, Galactic
+    from ..coordinates import BaseRADecFrame, FK4, FK4NoETerms, FK5, ICRS, ITRS, Galactic
 
     # Create a 2-dimensional WCS
     wcs = WCS(naxis=2)
@@ -128,6 +128,11 @@ def _celestial_frame_to_wcs_builtin(frame, projection='TAN'):
     elif isinstance(frame, Galactic):
         xcoord = 'GLON'
         ycoord = 'GLAT'
+    elif isinstance(frame, ITRS):
+        xcoord = 'TLON'
+        ycoord = 'TLAT'
+        wcs.wcs.radesys = 'ITRS'
+        wcs.wcs.dateobs = frame.obstime.utc.isot
     else:
         return None
 
@@ -140,7 +145,7 @@ WCS_FRAME_MAPPINGS = [[_wcs_to_celestial_frame_builtin]]
 FRAME_WCS_MAPPINGS = [[_celestial_frame_to_wcs_builtin]]
 
 
-class custom_wcs_to_frame_mappings(object):
+class custom_wcs_to_frame_mappings:
     def __init__(self, mappings=[]):
         if hasattr(mappings, '__call__'):
             mappings = [mappings]
@@ -157,7 +162,7 @@ class custom_wcs_to_frame_mappings(object):
 custom_frame_mappings = custom_wcs_to_frame_mappings
 
 
-class custom_frame_to_wcs_mappings(object):
+class custom_frame_to_wcs_mappings:
     def __init__(self, mappings=[]):
         if hasattr(mappings, '__call__'):
             mappings = [mappings]
@@ -320,7 +325,7 @@ def proj_plane_pixel_scales(wcs):
     astropy.wcs.utils.proj_plane_pixel_area
 
     """
-    return np.sqrt((wcs.pixel_scale_matrix**2).sum(axis=0, dtype=np.float))
+    return np.sqrt((wcs.pixel_scale_matrix**2).sum(axis=0, dtype=float))
 
 
 def proj_plane_pixel_area(wcs):

@@ -1,13 +1,13 @@
 # Licensed under a 3-clause BSD style license - see PYFITS.rst
 
-from __future__ import division, with_statement
 
+import os
+import shutil
 import warnings
 
 import pytest
 import numpy as np
 
-from ....extern import six  # pylint: disable=W0611
 from ....io import fits
 from ....table import Table
 from .. import printdiff
@@ -18,7 +18,6 @@ from . import FitsTestCase
 
 class TestConvenience(FitsTestCase):
 
-    @pytest.mark.skipif('six.PY2')
     def test_resource_warning(self):
         warnings.simplefilter('always', ResourceWarning)
         with catch_warnings() as w:
@@ -82,7 +81,7 @@ class TestConvenience(FitsTestCase):
         """
         Regression test for https://github.com/astropy/astropy/issues/5988
         """
-        data = np.zeros((5, ), dtype=[('x', np.float), ('y', np.int)])
+        data = np.zeros((5, ), dtype=[('x', float), ('y', int)])
         h_in = fits.Header()
         h_in['ANSWER'] = (42.0, 'LTU&E')
         filename = self.temp('tabhdr42.fits')
@@ -125,7 +124,7 @@ class TestConvenience(FitsTestCase):
 
         # This may seem weird, but check printdiff to see, need to test
         # incorrect second file
-        with pytest.raises(IOError):
+        with pytest.raises(OSError):
             printdiff('o4sp040b0_raw.fits', 'fakefile.fits', extname='sci')
 
         # Test HDU object inputs
@@ -141,3 +140,20 @@ class TestConvenience(FitsTestCase):
 
                 with pytest.raises(NotImplementedError):
                     printdiff(in1, in2, 0)
+
+    def test_tabledump(self):
+        """
+        Regression test for https://github.com/astropy/astropy/issues/6937
+        """
+        # copy fits file to the temp directory
+        filename = self.data('tb.fits')
+        temp_filename = self.temp('tb.fits')
+        shutil.copyfile(filename, temp_filename)
+
+        # test without datafile
+        fits.tabledump(temp_filename)
+        assert os.path.isfile(self.temp('tb_1.txt'))
+
+        # test with datafile
+        fits.tabledump(temp_filename, datafile=self.temp('test_tb.txt'))
+        assert os.path.isfile(self.temp('test_tb.txt'))

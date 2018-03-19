@@ -1,5 +1,4 @@
 """Main Lomb-Scargle Implementation"""
-from __future__ import print_function, division
 
 import numpy as np
 
@@ -7,8 +6,6 @@ from .implementations import lombscargle, available_methods
 from .implementations.mle import periodic_fit
 from . import _statistics
 from ... import units
-from ...utils.compat.numpy import broadcast_arrays
-from ...extern.six.moves import map
 
 
 def has_units(obj):
@@ -27,7 +24,7 @@ def strip_units(*arrs):
         return map(strip, arrs)
 
 
-class LombScargle(object):
+class LombScargle:
     """Compute the Lomb-Scargle Periodogram.
 
     This implementations here are based on code presented in [1]_ and [2]_;
@@ -66,14 +63,14 @@ class LombScargle(object):
     frequency grid & find the frequency of max power:
 
     >>> frequency, power = LombScargle(t, y).autopower()
-    >>> frequency[np.argmax(power)]
+    >>> frequency[np.argmax(power)]  # doctest: +FLOAT_CMP
     1.0016662310392956
 
     Compute the Lomb-Scargle periodogram at a user-specified frequency grid:
 
     >>> freq = np.arange(0.8, 1.3, 0.1)
-    >>> LombScargle(t, y).power(freq)
-    array([ 0.0204304 ,  0.01393845,  0.35552682,  0.01358029,  0.03083737])
+    >>> LombScargle(t, y).power(freq)  # doctest: +FLOAT_CMP
+    array([0.0204304 , 0.01393845, 0.35552682, 0.01358029, 0.03083737])
 
     If the inputs are astropy Quantities with units, the units will be
     validated and the outputs will also be Quantities with appropriate units:
@@ -112,9 +109,9 @@ class LombScargle(object):
     def _validate_inputs(self, t, y, dy):
         # Validate shapes of inputs
         if dy is None:
-            t, y = broadcast_arrays(t, y, subok=True)
+            t, y = np.broadcast_arrays(t, y, subok=True)
         else:
-            t, y, dy = broadcast_arrays(t, y, dy, subok=True)
+            t, y, dy = np.broadcast_arrays(t, y, dy, subok=True)
         if t.ndim != 1:
             raise ValueError("Inputs (t, y, dy) must be 1-dimensional")
 

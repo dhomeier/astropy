@@ -1,5 +1,4 @@
 # Licensed under a 3-clause BSD style license - see PYFITS.rst
-from __future__ import absolute_import
 
 import os
 
@@ -73,7 +72,3 @@ def get_package_data():
 
 def get_external_libraries():
     return ['cfitsio']
-
-
-def requires_2to3():
-    return False

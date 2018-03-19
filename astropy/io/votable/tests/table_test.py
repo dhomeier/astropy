@@ -2,26 +2,15 @@
 """
 Test the conversion to/from astropy.table
 """
-
-# TEST_UNICODE_LITERALS
-
 import io
 import os
 
-import pytest
+import pathlib
 import numpy as np
 
 from ....utils.data import get_pkg_data_filename, get_pkg_data_fileobj
 from ..table import parse, writeto
 from .. import tree
-from ....extern.six.moves import zip
-
-try:
-    import pathlib
-except ImportError:
-    HAS_PATHLIB = False
-else:
-    HAS_PATHLIB = True
 
 
 def test_table(tmpdir):
@@ -116,6 +105,17 @@ def test_names_over_ids():
         'Emag', '24mag', 'f_Name']
 
 
+def test_explicit_ids():
+    with get_pkg_data_fileobj('data/names.xml', encoding='binary') as fd:
+        votable = parse(fd)
+
+    table = votable.get_first_table().to_table(use_names_over_ids=False)
+
+    assert table.colnames == [
+        'col1', 'col2', 'col3', 'col4', 'col5', 'col6', 'col7', 'col8', 'col9',
+        'col10', 'col11', 'col12', 'col13', 'col14', 'col15', 'col16', 'col17']
+
+
 def test_table_read_with_unnamed_tables():
     """
     Issue #927
@@ -128,7 +128,6 @@ def test_table_read_with_unnamed_tables():
     assert len(t) == 1
 
 
-@pytest.mark.skipif('not HAS_PATHLIB')
 def test_votable_path_object():
     """
     Testing when votable is passed as pathlib.Path object #4412.
@@ -175,4 +174,4 @@ def test_empty_table():
         get_pkg_data_filename('data/empty_table.xml'),
         pedantic=False)
     table = votable.get_first_table()
-    astropy_table = table.to_table()
+    astropy_table = table.to_table()  # noqa

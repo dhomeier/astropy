@@ -1,5 +1,4 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import pytest
 
@@ -8,7 +7,6 @@ from numpy.testing import assert_almost_equal
 from numpy.testing import assert_allclose
 
 from ...utils.data import get_pkg_data_contents, get_pkg_data_filename
-from ...extern.six.moves import range
 from ...time import Time
 from ... import units as u
 
@@ -189,7 +187,7 @@ def test_celestial():
 def test_wcs_to_celestial_frame():
 
     # Import astropy.coordinates here to avoid circular imports
-    from ...coordinates.builtin_frames import ICRS, FK5, FK4, Galactic
+    from ...coordinates.builtin_frames import ICRS, ITRS, FK5, FK4, Galactic
 
     mywcs = WCS(naxis=2)
     with pytest.raises(ValueError) as exc:
@@ -219,6 +217,12 @@ def test_wcs_to_celestial_frame():
     frame = wcs_to_celestial_frame(mywcs)
     assert isinstance(frame, Galactic)
 
+    mywcs.wcs.ctype = ['TLON-CAR', 'TLAT-CAR']
+    mywcs.wcs.dateobs = '2017-08-17T12:41:04.430'
+    frame = wcs_to_celestial_frame(mywcs)
+    assert isinstance(frame, ITRS)
+    assert frame.obstime == Time('2017-08-17T12:41:04.430')
+
     mywcs.wcs.ctype = ['RA---TAN', 'DEC--TAN']
     mywcs.wcs.radesys = 'ICRS'
 
@@ -247,7 +251,7 @@ def test_wcs_to_celestial_frame_extend():
     with pytest.raises(ValueError):
         wcs_to_celestial_frame(mywcs)
 
-    class OffsetFrame(object):
+    class OffsetFrame:
         pass
 
     def identify_offset(wcs):
@@ -266,7 +270,7 @@ def test_wcs_to_celestial_frame_extend():
 def test_celestial_frame_to_wcs():
 
     # Import astropy.coordinates here to avoid circular imports
-    from ...coordinates import ICRS, FK5, FK4, FK4NoETerms, Galactic, BaseCoordinateFrame
+    from ...coordinates import ICRS, ITRS, FK5, FK4, FK4NoETerms, Galactic, BaseCoordinateFrame
 
     class FakeFrame(BaseCoordinateFrame):
         pass
@@ -322,10 +326,22 @@ def test_celestial_frame_to_wcs():
     mywcs.wcs.set()
     assert_allclose((mywcs.wcs.lonpole, mywcs.wcs.latpole), (180, 60))
 
+    frame = ITRS(obstime=Time('2017-08-17T12:41:04.43'))
+    mywcs = celestial_frame_to_wcs(frame, projection='CAR')
+    assert tuple(mywcs.wcs.ctype) == ('TLON-CAR', 'TLAT-CAR')
+    assert mywcs.wcs.radesys == 'ITRS'
+    assert mywcs.wcs.dateobs == '2017-08-17T12:41:04.430'
+
+    frame = ITRS()
+    mywcs = celestial_frame_to_wcs(frame, projection='CAR')
+    assert tuple(mywcs.wcs.ctype) == ('TLON-CAR', 'TLAT-CAR')
+    assert mywcs.wcs.radesys == 'ITRS'
+    assert mywcs.wcs.dateobs == Time('J2000').utc.isot
+
 
 def test_celestial_frame_to_wcs_extend():
 
-    class OffsetFrame(object):
+    class OffsetFrame:
         pass
 
     frame = OffsetFrame()

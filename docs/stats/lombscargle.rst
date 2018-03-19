@@ -15,7 +15,7 @@ The code here is adapted from the `astroml`_ package ([4]_, [5]_) and the `gatsp
 For a detailed practical discussion of the lomb-scargle periodogram, with code
 examples based on astropy, see *Understanding the Lomb-Scargle Periodogram* [11]_, with associated code at https://github.com/jakevdp/PracticalLombScargle/.
 
-.. _gatspy: http://astroml.org/gatspy
+.. _gatspy: http://www.astroml.org/gatspy/
 .. _astroml: http://astroml.org/
 
 
@@ -342,7 +342,7 @@ around the periodic model:
 
 This form of the normalization can be specified with ``normalization='model'``.
 As above, the resulting power is a dimensionless
-quantity that lies in the range *0 ≤ P ≤ 1*.
+quantity that lies in the range *0 ≤ P ≤ ∞*.
 
 Logarithmic Normalization
 -------------------------
@@ -441,11 +441,11 @@ For example, let's simulate 60 observations of a sine wave with noise:
 >>> y = np.sin(2 * np.pi * t) + dy * rand.randn(60)
 >>> ls = LombScargle(t, y, dy)
 >>> freq, power = ls.autopower()
->>> print(power.max())
-0.338140019582
+>>> print(power.max())  # doctest: +FLOAT_CMP
+0.33814001958188855
 
 The peak of the periodogram has a value of 0.33, but how significant is
-this peak? We can address this question using the 
+this peak? We can address this question using the
 :func:`~astropy.stats.LombScargle.false_alarm_probability` method:
 
 .. doctest-requires:: scipy
@@ -479,7 +479,7 @@ false alarm probability, which can be done with the
 
   >>> probabilities = [0.1, 0.05, 0.01]
   >>> ls.false_alarm_level(probabilities)  # doctest: +FLOAT_CMP
-  array([ 0.25446627,  0.27436154,  0.31716182])
+  array([0.25446627, 0.27436154, 0.31716182])
 
 This tells us that to attain a 10% false alarm probability requires the highest
 periodogram peak to be approximately 0.25; 5% requires 0.27, and 1% requires
@@ -826,7 +826,7 @@ Literature References
 .. [5]  Vanderplas, J., Connolly, A. Ivezic, Z. & Gray, A. *Statistics,
 	Data Mining and Machine Learning in Astronomy*. Princeton Press (2014)}
 .. [6] VanderPlas, J. *Gatspy: General Tools for Astronomical Time Series
-       in Python* (2015) http://dx.doi.org/10.5281/zenodo.14833
+       in Python* (2015) https://zenodo.org/record/14833
 .. [7] VanderPlas, J. & Ivezic, Z. *Periodograms for Multiband Astronomical
        Time Series*. ApJ 812.1:18 (2015)
 .. [8] Baluev, R.V. *Assessing Statistical Significance of Periodogram Peaks*
