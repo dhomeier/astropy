@@ -444,7 +444,7 @@ def _guess(table, read_kwargs, format, fast_reader, fulltrace=False):
 
     # If a fast version of the reader is available, try that before the slow version
     if (fast_reader['enable'] and format is not None and
-        'fast_{0}'.format(format) in core.FAST_CLASSES):
+            'fast_{0}'.format(format) in core.FAST_CLASSES):
         fast_kwargs = copy.deepcopy(read_kwargs)
         fast_kwargs['Reader'] = core.FAST_CLASSES['fast_{0}'.format(format)]
         full_list_guess = [fast_kwargs] + full_list_guess
