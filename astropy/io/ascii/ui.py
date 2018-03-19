@@ -29,6 +29,7 @@ from . import sextractor
 from . import ipac
 from . import latex
 from . import html
+from . import rst
 from . import fastbasic
 from . import cparser
 from . import fixedwidth
@@ -161,10 +162,10 @@ def get_reader(Reader=None, Inputter=None, Outputter=None, **kwargs):
     reader : `~astropy.io.ascii.BaseReader` subclass
         ASCII format reader instance
     """
-    # This function is a light wrapper around core._get_reader to provide a public interface
-    # with a default Reader.
+    # This function is a light wrapper around core._get_reader to provide a
+    # public interface with a default Reader.
     if Reader is None:
-        if kwargs.get('fast_reader', False):
+        if kwargs.get('fast_reader', False) and len(kwargs.get('delimiter', ' ')) < 2:
             Reader = fastbasic.FastBasic
         else:
             Reader = basic.Basic
@@ -299,6 +300,7 @@ def read(table, guess=None, **kwargs):
     # Dictionary arguments are passed by reference per default and thus need
     # special protection:
     new_kwargs = copy.deepcopy(kwargs)
+    kwargs['fast_reader'] = copy.deepcopy(fast_reader)
 
     # Get the Reader class based on possible format and Reader kwarg inputs.
     Reader = _get_format_class(format, kwargs.get('Reader'), 'Reader')
@@ -365,8 +367,8 @@ def read(table, guess=None, **kwargs):
             guess = False
 
     if not guess:
-        reader = get_reader(**new_kwargs)
         if format is None:
+            reader = get_reader(**new_kwargs)
             format = reader._format_name
 
         # Try the fast reader version of `format` first if applicable.  Note that
@@ -441,9 +443,9 @@ def _guess(table, read_kwargs, format, fast_reader, fulltrace=False):
     full_list_guess = _get_guess_kwargs_list(read_kwargs)
 
     # If a fast version of the reader is available, try that before the slow version
-    if fast_reader['enable'] and format is not None and 'fast_{0}'.format(format) in \
-                                                         core.FAST_CLASSES:
-        fast_kwargs = read_kwargs.copy()
+    if (fast_reader['enable'] and format is not None and
+        'fast_{0}'.format(format) in core.FAST_CLASSES):
+        fast_kwargs = copy.deepcopy(read_kwargs)
         fast_kwargs['Reader'] = core.FAST_CLASSES['fast_{0}'.format(format)]
         full_list_guess = [fast_kwargs] + full_list_guess
     else:
@@ -614,8 +616,9 @@ def _get_guess_kwargs_list(read_kwargs):
 
     # Now try readers that accept the user-supplied keyword arguments
     # (actually include all here - check for compatibility of arguments later).
-    # FixedWidthTwoLine would also be read by Basic, so it needs to come first.
-    for reader in [fixedwidth.FixedWidthTwoLine,
+    # FixedWidthTwoLine would also be read by Basic, so it needs to come first;
+    # same for RST.
+    for reader in [fixedwidth.FixedWidthTwoLine, rst.RST,
                    fastbasic.FastBasic, basic.Basic,
                    fastbasic.FastRdb, basic.Rdb,
                    fastbasic.FastTab, basic.Tab,
