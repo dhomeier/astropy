@@ -32,6 +32,12 @@ astropy.extern
 astropy.io.ascii
 ^^^^^^^^^^^^^^^^
 
+- Added the RST (Restructured-text) table format to the set of formats that are
+  guessed by default. [#5578]
+
+- The read trace (used primarily for debugging) now includes guess argument
+  sets that were skipped entirely for some reason. [#5578]
+
 astropy.io.misc
 ^^^^^^^^^^^^^^^
 
@@ -121,6 +127,15 @@ astropy.extern
 astropy.io.ascii
 ^^^^^^^^^^^^^^^^
 
+- If a fast reader is explicitly selected (e.g. ``fast_reader='force') and
+  options which are incompatible with the fast reader are provided
+  (e.g. ``quotechar='##') then now a ``ParameterError`` exception will be
+  raised. [#5578]
+
+- The fast readers will now raise ``InconsistentTableError`` instead of
+  ``CParserError`` if the number of data and header columns do not match.
+  [#5578]
+
 astropy.io.misc
 ^^^^^^^^^^^^^^^
 
@@ -195,6 +210,9 @@ astropy.extern
 
 astropy.io.ascii
 ^^^^^^^^^^^^^^^^
+
+- Fixed a problem when ``guess=True`` that ``fast_reader`` options
+  could be dropped after the first fast reader class was tried. [#5578]
 
 astropy.io.misc
 ^^^^^^^^^^^^^^^
@@ -277,11 +295,6 @@ astropy.extern
 
 astropy.io.ascii
 ^^^^^^^^^^^^^^^^
-
-  - Options not available with the fast reader raise a ``ParameterError``
-    if the latter was explicitly requested; ``guess=True`` will honour
-    any additional read options (including ``fast_reader`` ones) for all
-    readers successively tried. [#5578]
 
 astropy.io.fits
 ^^^^^^^^^^^^^^^
