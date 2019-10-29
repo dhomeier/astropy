@@ -12,8 +12,8 @@ from numpy import ma
 
 from astropy.table import Table, MaskedColumn
 from astropy.io import ascii
-from astropy.io.ascii.core import ParameterError, FastOptionsError, InconsistentTableError
-from astropy.io.ascii.cparser import CParserError
+from astropy.io.ascii.core import (
+    ParameterError, FastOptionsError, InconsistentTableError)
 from astropy.io.ascii.fastbasic import (
     FastBasic, FastCsv, FastTab, FastCommentedHeader, FastRdb, FastNoHeader)
 from astropy.tests.helper import catch_warnings
@@ -1073,7 +1073,8 @@ def test_data_out_of_range(parallel, fast_reader, guess):
     # Test some additional corner cases
     fields = ['.0101E202', '0.000000314E+314', '1777E+305', '-1799E+305',
               '0.2e-323', '5200e-327', ' 0.0000000000000000000001024E+330']
-    values = np.array([1.01e200, 3.14e307, 1.777e308, -np.inf, 0.0, 4.94e-324, 1.024e308])
+    values = np.array([1.01e200, 3.14e307, 1.777e308, -np.inf,
+                       0.0, 4.94e-324, 1.024e308])
     with catch_warnings(AstropyWarning) as w:
         t = ascii.read(StringIO(' '.join(fields)), format='no_header',
                        guess=guess, fast_reader=fast_reader)
@@ -1134,14 +1135,14 @@ def test_data_at_range_limit(parallel, fast_reader, guess):
             pytest.xfail("Multiprocessing can sometimes fail on Travis CI")
 
     # Test very long fixed-format strings (to strtod range limit w/o Overflow)
-    for D in 99, 202, 305:
-        t = ascii.read(StringIO(99*'0' + '.' + D*'0' + '1'), format='no_header',
+    for d in 99, 202, 305:
+        t = ascii.read(StringIO(99*'0' + '.' + d*'0' + '1'), format='no_header',
                        guess=guess, fast_reader=fast_reader)
-        assert_almost_equal(t['col1'][0], 10.**-(D+1), rtol=rtol, atol=1.e-324)
-    for D in 99, 202, 308:
-        t = ascii.read(StringIO('1' + D*'0' + '.0'), format='no_header',
+        assert_almost_equal(t['col1'][0], 10.**-(d+1), rtol=rtol, atol=1.e-324)
+    for d in 99, 202, 308:
+        t = ascii.read(StringIO('1' + d*'0' + '.0'), format='no_header',
                        guess=guess, fast_reader=fast_reader)
-        assert_almost_equal(t['col1'][0], 10.**D, rtol=rtol, atol=1.e-324)
+        assert_almost_equal(t['col1'][0], 10.**d, rtol=rtol, atol=1.e-324)
 
     # 0.0 is always exact (no Overflow warning)!
     for s in '0.0', '0.0e+0', 399*'0'+'.'+365*'0':
@@ -1176,14 +1177,14 @@ def test_int_out_of_range(parallel, guess):
     huge = f'{imax+2:d}'
 
     text = f'P M S\n {imax:d} {imin:d} {huge:s}'
+    m = "OverflowError converting to IntType in column S, reverting to String"
     expected = Table([[imax], [imin], [huge]], names=('P', 'M', 'S'))
     with catch_warnings(AstropyWarning) as w:
         table = ascii.read(text, format='basic', guess=guess,
                            fast_reader={'parallel': parallel})
     if not parallel:
         assert len(w) == 1
-        assert ("OverflowError converting to IntType in column S, reverting to String"
-                in str(w[0].message))
+        assert m in str(w[0].message)
     assert_table_equal(table, expected)
 
     # Check with leading zeroes to make sure strtol does not read them as octal
@@ -1194,8 +1195,7 @@ def test_int_out_of_range(parallel, guess):
                            fast_reader={'parallel': parallel})
     if not parallel:
         assert len(w) == 1
-        assert ("OverflowError converting to IntType in column S, reverting to String"
-                in str(w[0].message))
+        assert m in str(w[0].message)
     assert_table_equal(table, expected)
 
 
@@ -1208,17 +1208,16 @@ def test_int_out_of_order(guess):
     """
     imax = np.iinfo(int).max-1
     text = f'A B\n 12.3 {imax:d}0\n {imax:d}0 45.6e7'
+    m = r'OverflowError converting to IntType in column B, reverting to String'
     expected = Table([[12.3, 10.*imax], [f'{imax:d}0', '45.6e7']],
                      names=('A', 'B'))
 
-    with pytest.warns(AstropyWarning, match=r'OverflowError converting to '
-                      r'IntType in column B, reverting to String'):
-        table = ascii.read(text, format='basic', guess=guess, fast_reader=True)
-        assert_table_equal(table, expected)
-    with pytest.warns(AstropyWarning, match=r'OverflowError converting to '
-                      r'IntType in column B, reverting to String'):
-        table = ascii.read(text, format='basic', guess=guess, fast_reader=False)
-        assert_table_equal(table, expected)
+    with pytest.warns(AstropyWarning, match=m):
+        tab = ascii.read(text, format='basic', guess=guess, fast_reader=True)
+        assert_table_equal(tab, expected)
+    with pytest.warns(AstropyWarning, match=m):
+        tab = ascii.read(text, format='basic', guess=guess, fast_reader=False)
+        assert_table_equal(tab, expected)
 
 
 @pytest.mark.parametrize("guess", [True, False])
@@ -1240,14 +1239,15 @@ def test_fortran_reader(parallel, guess):
     expstyles = {'e': 6*('E'),
                  'D': ('D', 'd', 'd', 'D', 'd', 'D'),
                  'Q': 3*('q', 'Q'),
-                  'Fortran': ('E', '0', 'D', 'Q', 'd', '0')}
+                 'Fortran': ('E', '0', 'D', 'Q', 'd', '0')}
 
     # C strtod (not-fast converter) can't handle Fortran exp
     with pytest.raises(FastOptionsError) as e:
         ascii.read(text.format(*(6*('D'))), format='basic', guess=guess,
                    fast_reader={'use_fast_converter': False,
                                 'parallel': parallel, 'exponent_style': 'D'})
-    assert 'fast_reader: exponent_style requires use_fast_converter' in str(e.value)
+    assert ('fast_reader: exponent_style requires use_fast_converter'
+            in str(e.value))
 
     # Enable multiprocessing and the fast converter iterate over
     # all style-exponent combinations, with auto-detection
