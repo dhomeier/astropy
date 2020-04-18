@@ -197,6 +197,9 @@ In the above example, the call to ``hdul.verify("fix")`` requests that `astropy.
 fix non-compliant fields and print informative messages. Other options in addition to ``"fix"``
 are described under FITS :ref:`fits_io_verification`
 
+In the above example, the call to ``hdul.verify(silentfix+warn)`` requests that `astropy.io.fits` stay silent for any non-compliances
+it can fix but issue warnings for unfixable errors. Other options are described under FITS :ref:`fits_io_verification`
+
 .. seealso:: FITS :ref:`fits_io_verification`.
 
 Working with FITS Headers
