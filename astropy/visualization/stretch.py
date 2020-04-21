@@ -197,7 +197,7 @@ class PowerStretch(BaseStretch):
     Parameters
     ----------
     a : float
-        The power index (see the above formula).
+        The power index (see the above formula).  ``a`` must be > 0.
     """
 
     @property
@@ -206,6 +206,8 @@ class PowerStretch(BaseStretch):
 
     def __init__(self, a):
         super().__init__()
+        if a <= 0:
+            raise ValueError("a must be > 0")
         self.power = a
 
     def __call__(self, values, clip=True, out=None, invalid=None):
