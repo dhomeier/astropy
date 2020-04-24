@@ -197,7 +197,8 @@ class PowerStretch(BaseStretch):
     Parameters
     ----------
     a : float
-        The power index (see the above formula).  ``a`` must be > 0.
+        The power index (see the above formula).  ``a`` must be greater
+        than 0.
     """
 
     @property
@@ -274,8 +275,9 @@ class PowerDistStretch(BaseStretch):
     Parameters
     ----------
     a : float, optional
-        The ``a`` parameter used in the above formula.  ``a`` must be >=
-        0, but cannot be set to 1.  Default is 1000.
+        The ``a`` parameter used in the above formula.  ``a`` must be
+        greater than or equal to 0, but cannot be set to 1.  Default is
+        1000.
     """
 
     def __init__(self, a=1000.0):
@@ -310,8 +312,9 @@ class InvertedPowerDistStretch(BaseStretch):
     Parameters
     ----------
     a : float, optional
-        The ``a`` parameter used in the above formula.  ``a`` must be >=
-        0, but cannot be set to 1.  Default is 1000.
+        The ``a`` parameter used in the above formula.  ``a`` must be
+        greater than or equal to 0, but cannot be set to 1.  Default is
+        1000.
     """
 
     def __init__(self, a=1000.0):
@@ -364,8 +367,8 @@ class LogStretch(BaseStretch):
     Parameters
     ----------
     a : float
-        The ``a`` parameter used in the above formula.  ``a`` must be >
-        0.  Default is 1000.
+        The ``a`` parameter used in the above formula.  ``a`` must be
+        greater than 0.  Default is 1000.
     """
 
     @property
@@ -444,8 +447,8 @@ class InvertedLogStretch(BaseStretch):
     Parameters
     ----------
     a : float, optional
-        The ``a`` parameter used in the above formula.  ``a`` must be >
-        0.  Default is 1000.
+        The ``a`` parameter used in the above formula.  ``a`` must be
+        greater than 0.  Default is 1000.
     """
 
     def __init__(self, a):
@@ -483,8 +486,8 @@ class AsinhStretch(BaseStretch):
         The ``a`` parameter used in the above formula.  The value of
         this parameter is where the asinh curve transitions from linear
         to logarithmic behavior, expressed as a fraction of the
-        normalized image.  ``a`` must be in the range 0 < a <= 1.
-        Default is 0.1.
+        normalized image.  ``a`` must be greater than 0 and less than or
+        equal to 1 (0 < a <= 1).  Default is 0.1.
     """
 
     def __init__(self, a=0.1):
@@ -518,8 +521,9 @@ class SinhStretch(BaseStretch):
     Parameters
     ----------
     a : float, optional
-        The ``a`` parameter used in the above formula.  ``a`` must be in
-        the range 0 < a <= 1.  Default is 1/3.
+        The ``a`` parameter used in the above formula.  ``a`` must be
+        greater than 0 and less than or equal to 1 (0 < a <= 1).
+        Default is 1/3.
     """
 
     def __init__(self, a=1./3.):
