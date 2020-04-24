@@ -431,9 +431,6 @@ astropy.units
 astropy.utils
 ^^^^^^^^^^^^^
 
-- The default IERS server has been updated to use the FTPS server hosted by
-  CDDIS. [#9964]
-
 astropy.visualization
 ^^^^^^^^^^^^^^^^^^^^^
 
