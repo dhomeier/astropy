@@ -333,9 +333,6 @@ astropy.units
 astropy.utils
 ^^^^^^^^^^^^^
 
-- The default IERS server has been updated to use the FTPS server hosted by
-  CDDIS. [#9964]
-
 astropy.visualization
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -492,6 +489,9 @@ astropy.units
 
 astropy.utils
 ^^^^^^^^^^^^^
+
+- The default IERS server has been updated to use the FTPS server hosted by
+  CDDIS. [#9964]
 
 - Fixed memory allocation on 64-bit systems within ``xml.iterparse`` [#10076]
 
