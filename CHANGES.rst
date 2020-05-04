@@ -165,9 +165,6 @@ astropy.table
 - Added support for ``SkyCoord`` mixin columns in ``dstack``, ``vstack`` and
   ``insert_row`` functions. [#9857]
 
-- Added support for ``SkyCoord`` mixin columns in ``dstack``, ``vstack`` and
-  ``insert_row`` functions. [#9857]
-
 - Added support for coordinate ``Representation`` and ``Differential`` mixin
   columns. [#10210]
 
