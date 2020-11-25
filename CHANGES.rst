@@ -23,6 +23,10 @@ astropy.coordinates
 astropy.cosmology
 ^^^^^^^^^^^^^^^^^
 
+- Change ``z_at_value`` to use ``scipy.optimize.minimize_scalar`` with default
+  method ``Brent`` (other options ``Bounded`` and ``Golden``) and accept 
+  ``bracket`` option to set initial search region. [#11080].
+
 astropy.extern
 ^^^^^^^^^^^^^^
 

@@ -15,6 +15,7 @@ the 4.2.x series of releases.
 In particular, this release includes:
 
 * :ref:`whatsnew-4.3-coordinates`
+* :ref:`whatsnew-4.3-cosmology`
 *
 
 In addition to these major changes, Astropy v4.3 includes a large number of
@@ -37,6 +38,22 @@ made much more precise (down to the milli-arcsec level).  To help this, the
 
 Furthermore, by ensuring expensive calculations of the precession-nutation
 matrix are only done once, the transformations have been sped up considerably.
+
+.. _whatsnew-4.3-cosmology:
+
+Support for different solvers and ``bracket`` option in ``z_at_value``
+======================================================================
+
+The ``z_at_value`` convenience function now supports several solver methods,
+the default of which provides a new ``bracket`` parameter to pass a starting
+range to the solver.
+
+  >>> from astropy import units as u
+  >>> from astropy.cosmology import Planck18, z_at_value
+  >>> z_at_value(Planck18.angular_diameter_distance, 1500*u.Mpc, bracket=(1.0, 1.5))
+  0.6804445252462878
+  >>> z_at_value(Planck18.angular_diameter_distance, 1500*u.Mpc, bracket=(2.0, 3.0))
+  3.7823268160744115
 
 Full change log
 ===============
