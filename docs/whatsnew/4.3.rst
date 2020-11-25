@@ -50,9 +50,9 @@ range to the solver.
 
   >>> from astropy import units as u
   >>> from astropy.cosmology import Planck18, z_at_value
-  >>> z_at_value(Planck18.angular_diameter_distance, 1500*u.Mpc, bracket=(1.0, 1.5))
+  >>> z_at_value(Planck18.angular_diameter_distance, 1500*u.Mpc, bracket=(1.0, 1.5))  # doctest: +FLOAT_CMP +IGNORE_WARNINGS
   0.6804445252462878
-  >>> z_at_value(Planck18.angular_diameter_distance, 1500*u.Mpc, bracket=(2.0, 3.0))
+  >>> z_at_value(Planck18.angular_diameter_distance, 1500*u.Mpc, bracket=(2.0, 3.0))  # doctest: +FLOAT_CMP +IGNORE_WARNINGS
   3.7823268160744115
 
 Full change log
