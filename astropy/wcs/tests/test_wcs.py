@@ -22,6 +22,7 @@ from astropy.utils.exceptions import (
 from astropy.tests.helper import assert_quantity_allclose
 from astropy.io import fits
 from astropy.coordinates import SkyCoord
+from astropy.nddata import Cutout2D
 
 
 _WCSLIB_VER = Version(_wcs.__version__)
@@ -1450,3 +1451,38 @@ def test_no_pixel_area():
 
     # Pixel scales still possible
     assert_quantity_allclose(w.proj_plane_pixel_scales(), 1)
+
+
+def test_distortion_header(tmpdir):
+    """
+    Test that plate distortion model is correctly described by `wcs.to_header()`
+    and preserved when creating a Cutout2D from the image, writing it to FITS,
+    and reading it back from the file.
+    """
+    path = get_pkg_data_filename("data/dss.14.29.56-62.41.05.fits.gz")
+    cen = np.array((50, 50))
+    siz = np.array((20, 20))
+
+    with fits.open(path) as hdulist:
+        with pytest.warns(wcs.FITSFixedWarning):
+            w = wcs.WCS(hdulist[0].header)
+        cut = Cutout2D(hdulist[0].data, position=cen, size=siz, wcs=w)
+
+    # This converts the DSS plate solution model with AMD[XY]n coefficients into a
+    # Template Polynomial Distortion model (TPD.FWD.n coefficients);
+    # not testing explicitly for the header keywords here.
+
+    w0 = wcs.WCS(w.wcs.to_header())
+    assert w.pixel_to_world(0, 0).separation(w0.pixel_to_world(0, 0)) < 1.e-3 * u.mas
+    assert w.pixel_to_world(*cen).separation(w0.pixel_to_world(*cen)) < 1.e-3 * u.mas
+
+    w1 = wcs.WCS(cut.wcs.to_header())
+    assert w.pixel_to_world(*cen).separation(w1.pixel_to_world(*(siz / 2))) < 1.e-3 * u.mas
+
+    cutfile = str(tmpdir.join('cutout.fits'))
+    fits.writeto(cutfile, cut.data, cut.wcs.to_header())
+
+    with fits.open(cutfile) as hdulist:
+        w2 = wcs.WCS(hdulist[0].header)
+
+    assert w.pixel_to_world(*cen).separation(w2.pixel_to_world(*(siz / 2))) < 1.e-3 * u.mas

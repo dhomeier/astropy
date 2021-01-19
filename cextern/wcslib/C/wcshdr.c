@@ -488,11 +488,10 @@ int wcsvfree(int *nwcs, struct wcsprm **wcs)
 #define I_DTYPE   0	/* Distortion type code.                            */
 #define I_NIPARM  1	/* Full (allocated) length of iparm[].              */
 #define I_NDPARM  2	/* No. of parameters in dparm[], excl. work space.  */
-#define I_DOCORR  3	/* True if distortion func computes a correction.   */
-#define I_TPDNCO  4	/* No. of TPD coefficients, forward...              */
-#define I_TPDINV  5	/* ...and inverse.                                  */
-#define I_TPDAUX  6	/* True if auxiliary variables are used.            */
-#define I_TPDRAD  7	/* True if the radial variable is used.             */
+#define I_TPDNCO  3	/* No. of TPD coefficients, forward...              */
+#define I_TPDINV  4	/* ...and inverse.                                  */
+#define I_TPDAUX  5	/* True if auxiliary variables are used.            */
+#define I_TPDRAD  6	/* True if the radial variable is used.             */
 
 int wcshdo(int ctrl, struct wcsprm *wcs, int *nkeyrec, char **header)
 
@@ -1680,9 +1679,13 @@ int wcshdo(int ctrl, struct wcsprm *wcs, int *nkeyrec, char **header)
         }
 
         /* Does the distortion function compute a correction? */
-        if (iparm[I_DOCORR]) {
+        if (dis->docorr[j]) {
           wcshdo_util(ctrl, keyword, "", 0, 0x0, 0, 0, 0, alt, 0, 0,
             "'DOCORR: 1'", "Distortion function computes a correction",
+            nkeyrec, header, &status);
+        } else {
+          wcshdo_util(ctrl, keyword, "", 0, 0x0, 0, 0, 0, alt, 0, 0,
+            "'DOCORR: 0'", "Distortion function computes coordinates",
             nkeyrec, header, &status);
         }
 
