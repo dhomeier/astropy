@@ -2669,6 +2669,10 @@ reduce these to 2 dimensions using the naxis kwarg.
                 self.wcs.alt = key
             header_string = self.wcs.to_header(relax)
             header = fits.Header.fromstring(header_string)
+            for i, kw in enumerate(header.get("COMMENT", "")):
+                libinfo = kw.split("WCSLIB ")
+                if len(libinfo) > 1:
+                    header.insert(("COMMENT", i), ("WCSLIBV", libinfo[1].strip(), kw))
             keys_to_remove = ["", " ", "COMMENT"]
             for kw in keys_to_remove:
                 if kw in header:

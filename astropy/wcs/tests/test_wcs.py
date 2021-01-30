@@ -360,6 +360,10 @@ def test_to_header_string():
             "MJDREFF =                  0.0 / [d] MJD of fiducial time, fractional part      "
         )
 
+    if _WCSLIB_VER >= Version('5.6'):
+        hdrstr += (
+            f"WCSLIBV = '{_WCSLIB_VER}   '           /  WCS header keyrecords produced by WCSLIB {_WCSLIB_VER}",
+        )
     hdrstr += ("END", )
 
     header_string = ''.join(hdrstr)
@@ -375,20 +379,19 @@ def test_to_header_string():
 
 
 def test_to_fits():
-    nrec = 11 if _WCSLIB_VER >= Version('7.1') else 8
     if _WCSLIB_VER < Version('7.1'):
-        nrec = 8
-    elif _WCSLIB_VER < Version('7.3'):
-        nrec = 11
-    else:
         nrec = 9
+    elif _WCSLIB_VER < Version('7.3'):
+        nrec = 12
+    else:
+        nrec = 10
 
     w = wcs.WCS()
-    header_string = w.to_header()
+    wheader = w.to_header()
     wfits = w.to_fits()
     assert isinstance(wfits, fits.HDUList)
     assert isinstance(wfits[0], fits.PrimaryHDU)
-    assert header_string == wfits[0].header[-nrec:]
+    assert wheader == wfits[0].header[-nrec:]
 
 
 def test_to_header_warning():
